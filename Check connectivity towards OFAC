@@ -1,0 +1,25 @@
+# Bash script to:                       
+# Check Sanction List Connectivity                 
+# Log errors if any     
+# sh -x                                 
+##############################
+
+#!/bin/bash
+downloadSanctionList ()
+{
+wget -q --spider https://www.treasury.gov/ofac/downloads/sdn.xml
+if [ $? -eq 0 ]; then
+    echo "Online"
+else
+	echo "Offline"
+    echo "Sanction List Site Unreachable"
+	echo "W-GET Failed to fetch Sanction List from Site, Cannot Fetch OFAC."
+	echo "Go to TWE Console and execute the Troubelshooting Scripts"
+	echo "Go to /home/twDp/log/DepositSanctionListAuditFullERROROPCO Log and check the output"
+	echo "FO please raise a TT and paste the all teh content of this output in the description field"
+fi
+} >> /home/twDp/log/SanctionListSiteAvailability$(date +"%Y.%m.%d.%S.%N").txt
+
+rm -rf /home/twDp/log/SanctionListSiteAvailability* &&
+downloadSanctionList
+*******************************************************************************************
